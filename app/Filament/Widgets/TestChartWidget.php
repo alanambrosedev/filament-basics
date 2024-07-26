@@ -35,6 +35,7 @@ class TestChartWidget extends ChartWidget
                 ],
             ],
             'labels' => $data->map(fn (TrendValue $value) => $value->date),
+
             // 'datasets' => [
             //     [
             //         'label' => '2023-24',
