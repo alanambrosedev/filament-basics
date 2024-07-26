@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
-use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
@@ -16,8 +15,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PostsRelationManager extends RelationManager
 {
@@ -26,37 +23,36 @@ class PostsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Section::make('Create a Post')
-                ->description('Creates a new Post')
-                // ->aside()
-                // ->collapsible()
-                ->schema([
-                    TextInput::make('title')->required(),
-                    TextInput::make('slug')->required()->unique(ignoreRecord:true),
-                    Select::make('category_id')
-                        ->label('Category')
-                        ->relationship('category','name')
-                        // ->searchable()
-                        ->required(),
-                    ColorPicker::make('color')->required(),
-                    MarkdownEditor::make('content')->required()->columnSpanFull(),
-                ])->columnSpan(2)->columns(2),
-            Group::make()->schema([
-                Section::make('Images')
-                ->collapsible()
-                ->schema([
-                    FileUpload::make('thumbnail')->disk('public')->directory('thumbnails'),
-                ])->columnSpan(1),
-                Section::make('Meta')
-                ->schema([
-                    TagsInput::make('tags')->required(),
-                    Checkbox::make('published')
-                ])
-            ])
+            ->schema([
+                Section::make('Create a Post')
+                    ->description('Creates a new Post')
+                    // ->aside()
+                    // ->collapsible()
+                    ->schema([
+                        TextInput::make('title')->required(),
+                        TextInput::make('slug')->required()->unique(ignoreRecord: true),
+                        Select::make('category_id')
+                            ->label('Category')
+                            ->relationship('category', 'name')
+                            // ->searchable()
+                            ->required(),
+                        ColorPicker::make('color')->required(),
+                        MarkdownEditor::make('content')->required()->columnSpanFull(),
+                    ])->columnSpan(2)->columns(2),
+                Group::make()->schema([
+                    Section::make('Images')
+                        ->collapsible()
+                        ->schema([
+                            FileUpload::make('thumbnail')->disk('public')->directory('thumbnails'),
+                        ])->columnSpan(1),
+                    Section::make('Meta')
+                        ->schema([
+                            TagsInput::make('tags')->required(),
+                            Checkbox::make('published'),
+                        ]),
+                ]),
 
-
-        ])->columns(3);
+            ])->columns(3);
     }
 
     public function table(Table $table): Table

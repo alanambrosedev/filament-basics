@@ -17,7 +17,7 @@ class Post extends Model
         'content',
         'thumbnail',
         'tags',
-        'published'
+        'published',
     ];
 
     protected $casts = [

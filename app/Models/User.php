@@ -18,6 +18,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->email === 'alan@demo.com';
     }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -10,10 +10,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AuthorsRelationManager extends RelationManager
 {
@@ -23,7 +20,7 @@ class AuthorsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('order')->numeric()->required()
+                TextInput::make('order')->numeric()->required(),
             ]);
     }
 
@@ -34,10 +31,10 @@ class AuthorsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable(),
                 Tables\Columns\TextColumn::make('email'),
-                TextColumn::make('order')->sortable()
+                TextColumn::make('order')->sortable(),
             ])
             ->filters([
-               
+
             ])
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
@@ -45,11 +42,11 @@ class AuthorsRelationManager extends RelationManager
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\TextInput::make('order')->numeric()->required(),
-                    ])
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                DetachAction::make()
+                DetachAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

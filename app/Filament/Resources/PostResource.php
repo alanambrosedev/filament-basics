@@ -3,12 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Filament\Resources\PostResource\RelationManagers\AuthorsRelationManager;
 use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager;
 use App\Models\Category;
 use App\Models\Post;
-use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
@@ -34,7 +32,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PostResource extends Resource
 {
@@ -46,7 +43,6 @@ class PostResource extends Resource
 
     protected static ?string $modelLabel = 'Articles';
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -54,16 +50,16 @@ class PostResource extends Resource
                 Tabs::make('Create a Post')
                     ->tabs([
                         Tab::make('Post Details')
-                        ->icon('heroicon-o-inbox')
-                        ->iconPosition(IconPosition::After)
-                        ->badge('Main')
-                        ->schema([
-                            TextInput::make('title')->required(),
-                            TextInput::make('slug')->required()->unique(ignoreRecord: true),
-                            Select::make('category_id')->label('Category')->relationship('category', 'name')// ->searchable()
-                            ->required(),
-                            ColorPicker::make('color')->required(),
-                        ]),
+                            ->icon('heroicon-o-inbox')
+                            ->iconPosition(IconPosition::After)
+                            ->badge('Main')
+                            ->schema([
+                                TextInput::make('title')->required(),
+                                TextInput::make('slug')->required()->unique(ignoreRecord: true),
+                                Select::make('category_id')->label('Category')->relationship('category', 'name')// ->searchable()
+                                    ->required(),
+                                ColorPicker::make('color')->required(),
+                            ]),
                         Tab::make('Content')->schema([MarkdownEditor::make('content')->required()->columnSpanFull()]),
                         Tab::make('Meta')->schema([FileUpload::make('thumbnail')->disk('public')->directory('thumbnails'), TagsInput::make('tags')->required(), Checkbox::make('published')]),
                     ])->activeTab(1)->persistTabInQueryString()
@@ -120,8 +116,8 @@ class PostResource extends Resource
                 ImageColumn::make('thumbnail')->toggleable(),
                 TextColumn::make('tags')->toggleable(),
                 CheckboxColumn::make('published')->toggleable(),
-                TextColumn::make('created_at')->label('Published on')->date()->sortable()->toggleable()
-                ])
+                TextColumn::make('created_at')->label('Published on')->date()->sortable()->toggleable(),
+            ])
             ->filters([
                 // Filter::make('Published Posts')->query(
                 //     function (Builder $query) {
@@ -135,10 +131,10 @@ class PostResource extends Resource
                 // ),
                 TernaryFilter::make('published'),
                 SelectFilter::make('category_id')
-                ->label('Category')
-                ->relationship('category','name')
-                ->searchable()
-                ->preload()
+                    ->label('Category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload(),
                 // ->options(Category::all()->pluck('name','id'))
                 // ->multiple()
             ])
@@ -150,8 +146,8 @@ class PostResource extends Resource
     {
         return [
             AuthorsRelationManager::class,
-            CommentsRelationManager::class
-    ];
+            CommentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
