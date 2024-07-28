@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -44,10 +48,20 @@ class UserResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
+            ->headerActions([
+                ExportAction::make()->exporter(UserExporter::class)
+                ->formats([
+                    ExportFormat::Csv
+                ])
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()->exporter(UserExporter::class)
+                ->formats([
+                    ExportFormat::Csv
+                ])
             ]);
     }
 
